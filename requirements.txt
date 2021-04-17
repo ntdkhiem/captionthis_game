@@ -9,8 +9,3 @@ sentry-sdk[Flask]==0.16.2
 flask-redis==0.4.0
 gunicorn==20.0.4
 requests==2.25.1
-# For debug/testing
-# ptvsd==4.3.2
-# fakeredis==1.4.5
-# pytest==6.2.2
-# pytest-mock==3.5.1
