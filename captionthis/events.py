@@ -35,7 +35,7 @@ class GameNamespace(Namespace):
             {data["p_id"]: data["g_players"].get(data["p_id"])},
             room=game_id,
         )
-        if len(data["g_players"]) == 3:
+        if len(data["g_players"]) >= 3:
             emit("gameReady", room=game_id)
         if data["g_status"] == "2":
             emit("gameFull", room=game_id)
