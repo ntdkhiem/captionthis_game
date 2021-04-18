@@ -41,6 +41,9 @@ RUN pip install --no-cache /wheels/*
 # copy project
 COPY . $HOME
 
+# Make celery.sh executable
+RUN chmod +x celery.sh
+
 # chown all the files to the app user
 RUN chown -R app $HOME
 
