@@ -65,7 +65,7 @@ def create_app(config_name=None, main=True) -> Flask:
         # that everything works even when there are multiple servers or
         # additional processes such as Celery workers wanting to access
         # Socket.IO
-        socketio.init_app(app, message_queue=app.config["SOCKETIO_MESSAGE_QUEUE"])
+        socketio.init_app(app, message_queue=app.config["SOCKETIO_MESSAGE_QUEUE"], cors_allowed_origins=[])
     else:
         # Initialize socketio to emit events through through the message queue
         # Note that since Celery does not use eventlet, we have to be explicit
@@ -76,7 +76,7 @@ def create_app(config_name=None, main=True) -> Flask:
             async_mode="threading",
         )
 
-    CORS(app, origins=["frontend"])
+    CORS(app)
 
     if not app.testing:
         redis_client.init_app(app)
