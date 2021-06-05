@@ -2,11 +2,12 @@ import os
 from logging.config import dictConfig
 
 from celery import Celery
-from flask import Flask
+from flask import Flask, Response
 from flask.logging import default_handler
 from flask_redis import FlaskRedis
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_wtf.csrf import CSRFProtect
 
 from config import config
 
@@ -32,6 +33,7 @@ dictConfig(
 )
 
 
+csrf = CSRFProtect()
 socketio = SocketIO()
 redis_client = FlaskRedis(decode_responses=True, encoding="utf-8")
 celery = Celery(
@@ -65,7 +67,10 @@ def create_app(config_name=None, main=True) -> Flask:
         # that everything works even when there are multiple servers or
         # additional processes such as Celery workers wanting to access
         # Socket.IO
-        socketio.init_app(app, message_queue=app.config["SOCKETIO_MESSAGE_QUEUE"], cors_allowed_origins=[])
+        socketio.init_app(app, 
+            message_queue=app.config["SOCKETIO_MESSAGE_QUEUE"], 
+            cors_allowed_origins=[],
+        )
     else:
         # Initialize socketio to emit events through through the message queue
         # Note that since Celery does not use eventlet, we have to be explicit
@@ -77,16 +82,31 @@ def create_app(config_name=None, main=True) -> Flask:
         )
 
     CORS(app)
+    csrf.init_app(app)
 
     if not app.testing:
         redis_client.init_app(app)
 
     # Import routes
-    from .game import game_bp
+    from .views.main import main_bp
+    from .views.about import about_bp
+    from .views.contact import contact_bp
 
-    app.register_blueprint(game_bp)
+    app.register_blueprint(main_bp)
+    app.register_blueprint(contact_bp, url_prefix="/contact")
+    app.register_blueprint(about_bp, url_prefix="/about")
 
     socketio.on_namespace(GameNamespace("/game"))
+    
+    # For GKE Liveness Probe
+    @app.route('/health')
+    def health_check():
+        return Response(status=200)
+   
+    # For GKE Readiness Probe
+    @app.route('/ready')
+    def readiness():
+        return Response(status=200)
 
     # Register error handlers
     register_errors(app)
@@ -103,6 +123,6 @@ def create_app(config_name=None, main=True) -> Flask:
 
     # Setup logger
     app.logger.removeHandler(default_handler)
-    app.logger.info("[+] CaptionThis SocketIO startup...")
+    app.logger.info("[+] CaptionThis startup...")
 
     return app
