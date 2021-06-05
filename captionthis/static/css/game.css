@@ -13,13 +13,14 @@
 }
 
 .gameBoard {
-  background-color: #CBCBCD;
+  background-color: #ececec;
 }
 
 /* players board */
 #playerBoard {
     height: inherit;
     width: 300px;
+    border-left: 3px solid black;
 }
 
 .player {
