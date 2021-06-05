@@ -1,0 +1,63 @@
+{% set navigation_bar = [
+	('/about', 'about', 'About'),
+	('/', 'game', 'Game'),
+	('/contact', 'contact', 'Contact'),
+] -%}
+{% set active_page = active_page|default('game') -%}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="_token" content="{{ csrf_token() }}">
+		{% block style %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}">
+		{% endblock %}
+		<title>{{active_page}} - Caption This</title>
+	</head>
+	<body>
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		{% for message in messages %}
+		<div class="alert alert-warning alert-dismissible fade show">{{ message }}</div>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+		<!-- As a heading -->
+		<nav class="navbar navbar-dark navbar-expand-lg bg-navbar">
+			<div class="container">
+				<div class="navbar-brand">Caption This</div>
+				<ul class="navbar-nav">
+					{% for href, id, caption in navigation_bar %}
+						<li class="nav-item">
+							<a
+								class="nav-link {% if id == active_page%} active {% endif %}"
+								href="{{ href|e }}">{{ caption|e }}
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+				<div class="d-flex">
+					<!-- <div class="text-white align-self-center"> made by <strong>Khiem Nguyen</strong></div> -->
+					<a class="mx-2" href="https://github.com/ntdkhiem" target="_blank">
+						<i class="fab fa-github text-white h4"></i>
+					</a>
+					<a class="mx-2" href="#!" target="_blank">
+						<i class="fab fa-discord text-white h4"></i>
+					</a>
+				</div>
+			</div>
+		</nav>
+		<main class="container mt-3">
+			{%block content%}
+			{%endblock%}
+		</main>
+
+		{% block scripts %}
+		<script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js')}}"></script>
+		<script src="https://kit.fontawesome.com/2ffe57b2b1.js" crossorigin="anonymous"></script>
+		{% endblock%}
+	</body>
+</html>

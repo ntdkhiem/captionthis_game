@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block style %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+{% endblock %}
+
+{% set active_page = 'contact' %}
+
+{% block content %}
+<div class="card py-5 my-5 text-center">
+  <div class="card-body">
+    <h5 class="card-title">Contact Me!</h5>
+    <p class="card-text">Please feel free to contact/report about anything!</p>
+    <a href="mailto:ppkhiemnguyen@gmail.com" class="card-link">ppkhiemnguyen@gmail.com</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

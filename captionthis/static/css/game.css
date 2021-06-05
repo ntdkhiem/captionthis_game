@@ -1,0 +1,131 @@
+/* Global */
+.hidden {
+  display: none;
+}
+/* ------ */
+
+.bg-navbar {
+  background-color: #545E75;
+}
+
+.bg-gameInfo {
+  background-color: #84B082;
+}
+
+.gameBoard {
+  background-color: #CBCBCD;
+}
+
+/* players board */
+#playerBoard {
+    height: inherit;
+    width: 300px;
+}
+
+.player {
+  display: flex;
+}
+.player img {
+  position: relative;
+}
+
+.avatar {
+  height: 40px;
+  width: 40px;
+}
+
+.ready-icon {
+  background: url("/static/img/check.svg") no-repeat 0px 0px;
+  height: 20px;
+  width: 20px;
+}
+
+.eye-icon {
+  background: url("/static/img/eye.svg") no-repeat 0px 0px;
+  height: 20px;
+  width: 20px;
+}
+
+.meme {
+    width: 500px;
+    height: 500px;
+}
+
+.gameBoard{
+  position: relative;
+  height: 700px;
+  width: 1000px;
+}
+
+.gameBoard section {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.nonOverlay {
+    position: absolute;
+    background-color: black;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.nonOverlay p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: xx-large;
+}
+
+section#vote span#finalScore {
+    position: absolute;
+    font-weight: 900;
+    color: white;
+}
+
+#previewContainer > img {
+  height: 100%;
+  width: 100%;
+}
+
+.score {
+    text-align: center;
+}
+
+.name {
+    text-align: center;
+}
+
+section#leaderboard div {
+    justify-content: space-between;
+    display: flex;
+}
+
+.first-place {
+    font-size: 30px;
+}
+
+.first-place i {
+    position: absolute;
+    top: 20px;
+    left: -20px;
+    transform: rotate(-20deg);
+}
+
+.second-place {
+    font-size: 20px;
+}
+
+.third-place {
+    font-size: 15px;
+}
+
+/* ------------- */
+
+section:not(.visible) {
+  display: none;
+}

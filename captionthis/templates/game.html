@@ -1,0 +1,135 @@
+{% from '_formhelpers.html' import render_field %}
+{% extends 'base.html' %}
+
+{% set active_page = 'game' %}
+
+{% block style %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="d-flex flex-row bg-gameInfo text-white p-2">
+   <div class="room pe-5 ps-2 fs-5">
+         Room: <span id="roomID"></span>
+   </div>
+   <div id="rounds" class="fs-5">
+         Round 0 of 0
+   </div>
+   <div class="duration ms-auto pe-2 fs-5">
+         Duration: <span id="timer">0</span>
+   </div>
+</nav>
+<div class="main d-flex align-items-stretch">
+   <div class="gameBoard p-5">
+      <section id="join" class="visible">
+         <div>
+            <h5 class="text-uppercase">Join Room</h5>
+            <form id="joinForm" action="{{ url_for('main.join_room') }}">
+               {{ join_form.hidden_tag() }}
+               <div class="form-floating mb-3">
+                     {{ render_field(join_form.game_id, "0000") }}
+               </div>
+               <input type="submit" class="btn btn-primary w-100 mb-1" value="Join">
+               <button class="btn btn-primary w-100" id="joinRandom">Join Random Room</button>
+            </form>
+         </div>
+
+         <div class="text-center py-3">-- OR --</div>
+
+         <div>
+            <h5 class="text-uppercase">Create Room</h5>
+            <form id="createForm" method='post' action="{{ url_for('main.create_room') }}">
+               {{ create_form.hidden_tag() }}
+               <div class="form-floating mb-3">
+                     {{ render_field(create_form.total_games) }}
+               </div>
+               <div class="form-floating mb-3">
+                     {{ render_field(create_form.total_players) }}
+               </div>
+               <div class="form-floating mb-3">
+                     {{ render_field(create_form.duration) }}
+               </div>
+               <input type="submit" value="Create" class="btn btn-primary w-100">
+            </form>
+         </div>
+      </section>
+      <section id="login">
+         <form id="createName">
+            <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="nickname" placeholder="name here" required>
+                  <label for="nickname">Nickname</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Join</button>
+         </form>
+      </section>
+      <section id="wait" class="">
+         <h4 class="waitMsg text-uppercase text-center">Waiting for more people...</h4>
+         <button id="btnPlay" disabled class="btn btn-primary w-100">Play</button>
+      </section>
+      <section id="caption" class="">
+        <div class="nonOverlay hidden">
+            <p>Waiting for the memer...</p>
+        </div>
+         <div class="row align-items-center">
+            <div class="col-7">
+                  <form id="captionForm">
+                     <input type="submit" value="Submit" class="btn btn-primary w-100">
+                  </form>
+            </div>
+            <div id="previewContainer" class="col-5">
+                  <button id="previewBtn" class="btn btn-primary w-100">Preview</button>
+            </div>
+         </div>
+      </section>
+    <section id="vote" class="">
+        <div class="nonOverlay hidden">
+            <p>Waiting for all voters...</p>
+        </div>
+        <div class="memeContainer text-center">
+            <span id="finalScore" class="display-1 font-weight-bold"></span>
+        </div>
+        <div class="options d-flex justify-content-evenly mt-3 mb-3">
+            <button class="option rounded px-4 py-3 btn btn-outline-primary">0</button>
+            <button class="option rounded px-4 py-3 btn btn-outline-primary">5</button>
+            <button class="option rounded px-4 py-3 btn btn-outline-primary">10</button>
+        </div>
+        <button id="btnVote" class="btn btn-primary w-100">Vote</button>
+    </section>
+      <section id="victory" class="">
+        <h2 class="text-muted text-center">WINNER</h2>
+        <div class="row justify-content-center">
+        </div>
+      </section>
+      <section id="leaderboard" class="">
+        <h3 class="text-center">Leaderboard</h3>
+         <button id="btnNextRound" class="btn btn-primary w-100">Next</button>
+      </section>
+   </div>
+   <div class="bg-light flex-fill p-3" id="playerBoard"></div>
+</div>
+
+<div class="modal fade" id="closedGameModal" tabindex="-1" aria-labelledby="closedGameLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="closedGameLabel">Game Is Closed!</h5>
+         </div>
+         <div class="modal-body">
+            You have been disconnected from the game due to insufficient amount of players. Please return back to the main room.
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btnReturn" data-bs-dismiss="modal">Return back</button>
+            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+{% endblock %}
