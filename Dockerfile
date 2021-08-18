@@ -10,7 +10,6 @@ COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /usr/src/app
-RUN chmod +x celery.sh
 
 # FOR LOCAL
 FROM base as local

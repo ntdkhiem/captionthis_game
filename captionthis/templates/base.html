@@ -12,6 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
     {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}">
