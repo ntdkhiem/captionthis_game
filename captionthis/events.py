@@ -8,7 +8,7 @@ from .api.memegenAPI import create_meme, delete_game_assets
 
 from . import socketio
 from .utils import Section
-from .helpers import ingame_only, next_player_turn, switch_to
+from .helpers import ingame_only, next_player_turn, switch_to, wait_for_transition
 
 
 class GameNamespace(Namespace):
@@ -74,6 +74,7 @@ class GameNamespace(Namespace):
             if game.all_ready():
                 emit("gameGetScore", game.caption["score"], room=player.gid)
                 if next_player_turn(game):
+                    wait_for_transition(current_app.config["VOTE_WAIT_TIME"])
                     switch_to("caption", game)
 
     def on_disconnect(self):

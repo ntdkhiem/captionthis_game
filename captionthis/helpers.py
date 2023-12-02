@@ -40,6 +40,10 @@ def ingame_only(f):
     return wrapped
 
 
+def wait_for_transition(time: 0):
+    socketio.sleep(time)
+
+
 def switch_to(sect: str, game: CaptionThis):
     game.clear_activity()
     socketio.sleep(current_app.config["TIME_DELAY"])
@@ -94,8 +98,10 @@ def next_player_turn(game: CaptionThis) -> bool:
     """
     if not game.set_next_memer():
         winners = game.get_winner()
+        print(winners)
         game.add_point([item[0] for item in winners])
         socketio.emit("gameGetWinner", winners, room=game.gid, namespace="/game")
+        wait_for_transition(current_app.config["VOTE_WAIT_TIME"])
         if game.rounds_remain == 0:
             # this is the last round in the game
             socketio.emit("gameEnd", game.players, room=game.gid, namespace="/game")

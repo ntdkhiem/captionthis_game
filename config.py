@@ -12,8 +12,9 @@ class Config(object):
     )
     REDIS_URL = os.environ.get("REDIS_URL", "redis://redis")
     DEFAULT_VOTE_DURATION = 120
-    IMAGES_DIRECTORY = os.environ.get('IMAGES_DIRECTORY', '')
+    IMAGES_DIRECTORY = os.environ.get("IMAGES_DIRECTORY", "")
     TIME_DELAY = 2  # in seconds
+    VOTE_WAIT_TIME = 2  # in seconds
 
 
 class DevelopmentConfig(Config):
