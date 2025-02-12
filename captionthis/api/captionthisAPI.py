@@ -210,23 +210,25 @@ class CaptionThis:
             pid (str): voter's ID
             score (int): score to be add by the voter
         """
-        with RedisMonitor(f"{self.ns}:activity") as mon:
-            if (
-                self.current_section == Section.VOTE.value
-                and pid != self.current_memer
-            ):
-                self.activity = mon.lrange(f"{self.ns}:activity", 0, -1)
-                cap_key = f"{self.ns}:player:{self.current_memer}:caption"
-                cap = mon.hgetall(cap_key)
-                if pid not in self.activity and cap:
-                    new_score = int(cap["score"]) + score
-                    mon.hset(cap_key, "score", new_score)
-                    mon.lpush(f"{self.ns}:activity", pid)
-                    self.activity.append(pid)
-                    return
-        raise VoteError(
-            "[Vote] Invalid or duplication player's id in activity list"
-        )
+        if score % 5 == 0 and 0 <= score <= 10:
+            with RedisMonitor(f"{self.ns}:activity") as mon:
+                if (
+                    self.current_section == Section.VOTE.value
+                    and pid != self.current_memer
+                ):
+                    self.activity = mon.lrange(f"{self.ns}:activity", 0, -1)
+                    cap_key = f"{self.ns}:player:{self.current_memer}:caption"
+                    cap = mon.hgetall(cap_key)
+                    if pid not in self.activity and cap:
+                        new_score = int(cap["score"]) + score
+                        mon.hset(cap_key, "score", new_score)
+                        mon.lpush(f"{self.ns}:activity", pid)
+                        self.activity.append(pid)
+                        return
+            raise VoteError(
+                "[Vote] Invalid or duplication player's id in activity list"
+            )
+        raise VoteError("[Vote] Invalid score")
 
     def add_point(self, pids: List[str]):
         """Add one point to every winner

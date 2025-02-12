@@ -40,7 +40,7 @@ def validate_game(mplrs, tr, d):
         InvalidDuration
         InvalidTotalRounds
     """
-    if mplrs < 2:
+    if mplrs < 3:
         raise InvalidTotalPlayers("Not enough players")
     if d < 1:
         raise InvalidDuration("Incorrect duration")

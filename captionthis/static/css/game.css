@@ -130,29 +130,3 @@ section#leaderboard div {
 section:not(.visible) {
   display: none;
 }
-
-
-#canttouchthis {
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-@keyframes shake {
-  0% {transform: translate(0px, 0px);}
-  20% {transform: translate(10px, 0px);}
-  40% {transform: translate(-10px, 0px);}
-  60% {transform: translate(10px, 0px);}
-  80% {transform: translate(-10px, 0px);}
-  100% {transform: translate(0px, 0px);}
-}
-
-#yes {
-  z-index: 2;
-}
-
-#btnVote {
-  z-index: 3;
-}
