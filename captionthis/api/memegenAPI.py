@@ -1,4 +1,5 @@
 import requests
+import itertools
 import random
 from collections import namedtuple
 from typing import List
@@ -9,6 +10,8 @@ Template = namedtuple(
     "Template", ["name", "key", "lines", "styles", "example", "source"]
 )
 
+ORDERS = itertools.cycle(["valentine", "aint-got-time", "afraid", "grape-devour", "kevin-grape", "try-cuter", "kevin-ranran", "us"])
+
 
 def get_meme() -> Template:
     """Retrieve a random template from memegen service
@@ -16,9 +19,10 @@ def get_meme() -> Template:
     Returns:
         str: template's object
     """
-    template_ids = requests.get("http://memegen:5000/templates")
-    tid = random.choice(template_ids.json())
-    res = requests.get(f"http://memegen:5000/templates/{tid}").json()
+    # template_ids = requests.get("http://memegen:5000/templates")
+    # tid = random.choice(template_ids.json())
+    # print(template_ids.json(), tid)
+    res = requests.get(f"http://memegen:5000/templates/{next(ORDERS)}").json()
     return Template(**res)
 
 

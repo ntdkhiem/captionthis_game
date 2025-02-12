@@ -22,10 +22,10 @@ class CreateGameForm(FlaskForm):
     total_players = IntegerField(
         "Total Players",
         default=5,
-        validators=[NumberRange(min=3, message="Must be at least 3 players")],
+        validators=[NumberRange(min=2, message="Must be at least 2 players")],
     )
     duration = IntegerField(
         "Duration(second) Per Caption",
-        default=10,
+        default=100,
         validators=[NumberRange(min=10, message="Must be at least 10 seconds")],
     )

@@ -321,30 +321,73 @@ constructVoteSection = (key) => {
     img = createImg(key)
     img.className = 'meme'
     document.querySelector('section#vote > div.memeContainer').appendChild(img)
+
+    // if templateKey is valentine, then replace button elements in div#voteButtonsContainer with "Yes" and "No"
+    if (templateKey == 'valentine') {
+        document.querySelector('section#vote > div.options').innerHTML = `
+            <button id="yes" type="button" class="option rounded px-4 py-3 btn btn-lg btn-success">HECK YESSSS</button>
+            <button type="button" class="z-index-1 option rounded px-4 py-3 btn btn-lg btn-danger">hmmm...nah</button>
+        `
+        document.querySelector('section#vote').querySelectorAll('button.option').forEach(e => {
+            e.addEventListener('click', (e) => selectOption(e.target))
+        })
+
+    }
 }
 
 document.querySelector('section#vote').querySelectorAll('button.option').forEach(e => {
     e.addEventListener('click', (e) => selectOption(e.target))
 })
 
+let scale = 1
+
 selectOption = (e) => {
-    console.log(e)
     parent = e.parentNode
-    parent.querySelectorAll('.option').forEach(c => {
-        if (!c.isEqualNode(e)) {
-            if (c.classList.contains('active')) {
-                c.classList.remove('active')
+    // add canttouchthis id if button has hmmm...nah text
+    if (e.textContent == 'hmmm...nah') {
+        e.id = 'canttouchthis'
+        const button = document.getElementById('canttouchthis')
+        const buttonYes = document.getElementById('yes')
+        button.addEventListener('mouseover', () => {
+            buttonYes.style.animation = 'shake 0.3s ease-in-out'
+            setTimeout(() => {
+                buttonYes.style.animation = ''
+            }, 300)
+            const x = Math.random() * (window.innerWidth / 2 - button.clientWidth)
+            const y = Math.random() * (window.innerHeight / 2 - button.clientHeight)
+            button.style.left = `${x}px`
+            button.style.top = `${y}px`
+        })
+    }
+    else {
+        parent.querySelectorAll('.option').forEach(c => {
+            if (!c.isEqualNode(e)) {
+                if (c.classList.contains('active')) {
+                    c.classList.remove('active')
+                }
             }
-        }
-    })
-    e.classList.add('active')
+        })
+        e.classList.add('active')
+    }
 }
 
 document.querySelector('#btnVote').addEventListener('click', () => vote())
 vote = () => {
     e = document.querySelector('section#vote > div.options > button.active')
     if (e) {
-        socket.emit('voteSubmit', e.textContent)
+        if (templateKey == 'valentine' && e.textContent == 'HECK YESSSS') {
+            socket.emit('voteSubmit', '9999')
+            document.querySelector('section#vote > div.options').innerHTML = `
+                <button type="button" class="option rounded px-4 py-3 btn btn-outline-primary btn-lg">0</button>
+                <button type="button" class="option rounded px-4 py-3 btn btn-outline-primary btn-lg">5</button>
+                <button type="button" class="option rounded px-4 py-3 btn btn-outline-primary btn-lg">10</button>
+            `
+            document.querySelector('section#vote').querySelectorAll('button.option').forEach(e => {
+                e.addEventListener('click', (e) => selectOption(e.target))
+            })
+        } else {
+            socket.emit('voteSubmit', e.textContent)
+        }
         document.querySelector('#btnVote').disabled = true
         document.querySelector('section#vote > .options')
             .childNodes.forEach(n => {n.disabled = true})
